@@ -9,26 +9,6 @@ def print_error_count():
     mb.showerror('Ошибка!', message)
 
 
-def save_picture():
-
-    count_created_graphs = 0
-    with open('seetings.json', 'r') as file:
-        base_link = json.load(file)['savelink']
-
-    while True:
-        link = base_link + "/graph{}.png".format(count_created_graphs)
-        try:
-            check_file = open(link, 'rb')
-        except FileNotFoundError:
-            matplotlib.pyplot.savefig(link, format="PNG")
-            break
-        else:
-            check_file.close()
-            count_created_graphs = count_created_graphs + 1
-
-    return link
-
-
 def save_picture_name(name, old_link=None):
 
     namec = name
@@ -36,8 +16,15 @@ def save_picture_name(name, old_link=None):
     same_exist = False
     change = True
 
-    with open('seetings.json', 'r') as file:
-        base_link = json.load(file)['savelink']
+    if old_link:
+        base_link = '/'.join(old_link.split('/')[:-1])
+    else:
+        with open('seetings.json', 'r') as file:
+            try:
+                base_link = json.load(file)['savelink']
+            except KeyError:
+                mb.showerror("Ошибка!", 'Укажите новую папку для сохранения в настройках!')
+                return ''
 
     if not name:
         if old_link is None:
@@ -67,12 +54,12 @@ def save_picture_name(name, old_link=None):
             same_exist = True
         else:
             if old_link is None:
-                if namec: # Если исходное имя не пустая строка
+                if namec:  # Если исходное имя не пустая строка
                     if same_exist:
                         # Если возникали совпадения при генерации, возникает запрос на сохранение с новым именем
                         change = mb.askyesno('Предупреждение!',
                                              'Файл с таким названием уже существет!\nСохранить с именем ' +
-                                              new_name + ' ?')
+                                             new_name + ' ?')
                 if change:
                     matplotlib.pyplot.savefig(link, format="PNG")
                 else:
