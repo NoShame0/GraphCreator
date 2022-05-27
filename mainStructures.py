@@ -50,85 +50,85 @@ def check_right(data: list, count_vars: int = 1, *args):
     return variables
 
 
-def picture_graph_create(graph):
+def picture_graph_create(graph, num):
 
     matplotlib.pyplot.clf()
-    nx.draw(graph)
+    nx.draw(graph, with_labels=num)
 
 
-def circulant_create(data):
+def circulant_create(data, num):
 
     n, elements = check_right(data, 2, int, ListOfInt)
     graph = nx.circulant_graph(n, elements)
-    picture_graph_create(graph)
+    picture_graph_create(graph, num)
 
 
-def balanced_tree_create(data: list):
+def balanced_tree_create(data: list, num):
 
     a, b = check_right(data, 2)
     graph = nx.balanced_tree(a, b)
-    picture_graph_create(graph)
+    picture_graph_create(graph, num)
 
 
-def hypercube_create(data: list):
+def hypercube_create(data: list, num):
 
     a = check_right(data)
     graph = nx.hypercube_graph(a)
-    picture_graph_create(graph)
+    picture_graph_create(graph, num)
 
 
-def binomal_tree_create(data):
+def binomal_tree_create(data, num):
 
     a = check_right(data)
     graph = nx.binomial_tree(a)
-    picture_graph_create(graph)
+    picture_graph_create(graph, num)
 
 
-def barbell_graph_create(data):
+def barbell_graph_create(data, num):
 
     m1, m2 = check_right(data, 2)
     graph = nx.barbell_graph(m1, m2)
-    picture_graph_create(graph)
+    picture_graph_create(graph, num)
 
 
-def grid_graph_create(data):
+def grid_graph_create(data, num):
 
-    a, b = check_right(data, 2)
-    graph = nx.grid_graph(a, b)
-    picture_graph_create(graph)
+    a = check_right(data, 1, ListOfInt)
+    graph = nx.grid_graph(a)
+    picture_graph_create(graph, num)
 
 
-def star_graph_create(data):
+def star_graph_create(data, num):
 
     a = check_right(data)
     graph = nx.star_graph(a)
-    picture_graph_create(graph)
+    picture_graph_create(graph, num)
 
 
-def wheel_graph_create(data):
+def wheel_graph_create(data, num):
 
     a = check_right(data)
     graph = nx.wheel_graph(a)
-    picture_graph_create(graph)
+    picture_graph_create(graph, num)
 
 
-def ladder_graph_create(data):
+def ladder_graph_create(data, num):
 
     a = check_right(data)
     graph = nx.ladder_graph(a)
-    picture_graph_create(graph)
+    picture_graph_create(graph, num)
 
 
-def turan_graph_create(data):
+def turan_graph_create(data, num):
 
     a, b = check_right(data, 2)
     graph = nx.turan_graph(a, b)
-    picture_graph_create(graph)
+    picture_graph_create(graph, num)
 
 
-def dorogovtsev_graph_create(data):
+def dorogovtsev_graph_create(data, num):
 
     a = check_right(data)
     graph = nx.dorogovtsev_goltsev_mendes_graph(a)
-    picture_graph_create(graph)
+    picture_graph_create(graph, num)
 

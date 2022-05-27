@@ -27,7 +27,7 @@ available_graphs = {
                   'состоящего из целых чисел вида x1, x2, x3 ... xm такие, что '
                   '1 <= x1 < x2 < x3 < ... < xm, где m - количество чисел в множестве'),
     "Граф штанги": (mS.barbell_graph_create, 'Размерность m1', 'Размерность m2'),
-    "Сетчатый граф": (mS.grid_graph_create, 'Размерность сетчатого графа(2 числа)', ''),
+    "Сетчатый граф": (mS.grid_graph_create, 'Размерность сетчатого графа (поседовательность чисел)'),
     'Граф "Звезда': (mS.star_graph_create, 'Количество вершин'),
     'Граф "Колесо': (mS.wheel_graph_create, 'Количество вершин'),
     'Граф "Тюран"': (mS.turan_graph_create, 'Количество вершин', 'Количество разделов'),
@@ -298,6 +298,12 @@ class DataWindow(Toplevel):
         self.lbl_name.grid(row=len(self.graph) + 1, column=0)
         self.entry_name.grid(row=len(self.graph) + 1, column=2)
 
+        self.var_num_check = BooleanVar()
+        self.var_num_check.set(0)
+        self.num_check_btn = Checkbutton(self, text='Пронумеровать вершины?',
+                                         variable=self.var_num_check, onvalue=1, offvalue=0)
+
+        self.num_check_btn.grid(pady=10)
         self.btnin = Button(self, text='Создать граф', command=self.graph_create)
         self.btnin.grid(column=2, pady=30)
 
@@ -308,7 +314,7 @@ class DataWindow(Toplevel):
             self.data.append(en.get())
 
         try:
-            self.graph[0](self.data)
+            self.graph[0](self.data, self.var_num_check.get())
         except:
             print_create_error()
         else:
