@@ -1,4 +1,6 @@
 # Модуль mainStructures содержит функции создания классических графов
+import json
+
 import matplotlib.pyplot as plt
 import networkx as nx
 import matplotlib.pyplot
@@ -53,7 +55,10 @@ def check_right(data: list, count_vars: int = 1, *args):
 def picture_graph_create(graph, num):
 
     matplotlib.pyplot.clf()
-    nx.draw(graph, with_labels=num)
+    with open('seetings.json', 'r') as file:
+        settings = json.load(file)
+
+    nx.draw(graph, with_labels=num, node_size=settings['node_size'], node_color=settings['node_color'])
 
 
 def circulant_create(data, num):

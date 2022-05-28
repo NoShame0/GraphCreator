@@ -22,6 +22,9 @@ def save_picture_name(name, old_link=None):
         with open('seetings.json', 'r') as file:
             try:
                 base_link = json.load(file)['savelink']
+                if base_link == '':
+                    mb.showerror("Ошибка!", 'Укажите новую папку для сохранения в настройках!')
+                    return ''
             except KeyError:
                 mb.showerror("Ошибка!", 'Укажите новую папку для сохранения в настройках!')
                 return ''

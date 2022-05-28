@@ -59,6 +59,7 @@ class MainWindow(Tk):
 
         # Окно настроек
         self.setWin = None
+        self.setNodeWin = None
         self.mainmenu.add_cascade(label='Настройки', menu=self.settings_menu_create())
 
         self.tab_control = ttk.Notebook(self)
@@ -124,6 +125,7 @@ class MainWindow(Tk):
 
         settings_menu = Menu(self.mainmenu, tearoff=0)
         settings_menu.add_command(label='Папка хранения', command=self.settings_window_create)
+        settings_menu.add_command(label='Вершины графов', command=self.settings_node_window_create)
 
         return settings_menu
 
@@ -263,10 +265,23 @@ class MainWindow(Tk):
             self.tab_control.pack_forget()
             self.general_menu_create()
 
+    def settings_node_window_create(self):
+        if self.setNodeWin is None:
+            self.setNodeWin = SettingsNode(self)
+            self.setNodeWin.protocol('WM_DELETE_WINDOW', self.settings_node_window_delete)
+        else:
+            self.setNodeWin.focus()
+
+    def settings_node_window_delete(self):
+        self.setNodeWin.destroy()
+        self.setNodeWin = None
+
     def settings_window_create(self):
         if self.setWin is None:
             self.setWin = Settings()
             self.setWin.protocol('WM_DELETE_WINDOW', self.settings_window_delete)
+        else:
+            self.setWin.focus()
 
     def settings_window_delete(self):
         self.setWin.destroy()
@@ -367,6 +382,8 @@ class Settings(Toplevel):
         try:
             with open('seetings.json', 'r') as _file:
                 self.link_save = json.load(_file)['savelink']
+                if self.link_save == '':
+                    self.link_save = '(Папка не выбрана)'
         except KeyError:
             self.link_save = '(Папка не выбрана)'
 
@@ -383,6 +400,58 @@ class Settings(Toplevel):
                 self.label_dir['text'] = f'Текущая папка для сохранения файлов: {directory}'
                 settings['savelink'] = directory
                 json.dump(settings, _file)
+
+
+class SettingsNode(Toplevel):
+    def __init__(self, master):
+        super(SettingsNode, self).__init__()
+
+        self.master = master
+        self.title('Настройка вершин')
+        self.resizable(False, False)
+
+        with open('seetings.json', 'r') as _file:
+            info = json.load(_file)
+
+        varcolor = StringVar(self)
+        varcolor.set(info['node_color'])
+
+        varsize = IntVar(self)
+        varsize.set(info['node_size'])
+
+        colors = ['blue', 'red', 'green', 'yellow', 'purple', 'black', 'gray']
+
+        self.enter_colors = OptionMenu(self, varcolor, *colors)
+
+        self.scale_size = Scale(self, from_=50, to=500, variable=varsize, orient=HORIZONTAL)
+        self.lbl_entry_color = Label(self, text='Цвет вершин')
+        self.lbl_entry_size = Label(self, text='Размер вершин')
+
+        self.lbl_entry_color.grid(row=0, column=0, padx=10, pady=20)
+        self.lbl_entry_size.grid(row=1, column=0, padx=10, pady=20)
+        self.enter_colors.grid(row=0, column=1, padx=10, pady=20)
+        self.scale_size.grid(row=1, column=1, padx=10, pady=20)
+
+        self.btn_save = Button(self, text='Сохранить настройки', command=lambda: self.save_settings(varcolor, varsize))
+        self.btn_save.grid(columnspan=2, padx=10, pady=20)
+
+    def save_settings(self, varcolor, varsize):
+        with open('seetings.json', 'r') as _file:
+            _settings = json.load(_file)
+
+        with open('seetings.json', 'w') as _file:
+            _settings['node_color'] = varcolor.get()
+            _settings['node_size'] = varsize.get()
+
+            json.dump(_settings, _file)
+
+        self.master.settings_node_window_delete()
+        print_save_settings_successful()
+
+
+def print_save_settings_successful():
+    msg = 'Настройки успешно сохранены!'
+    mb.showinfo("Успешно!", msg)
 
 
 # Всплывающие окна
