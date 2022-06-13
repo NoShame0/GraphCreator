@@ -32,4 +32,5 @@ if __name__ == '__main__':
     from gui import MainWindow
 
     root = MainWindow()
+    root.config(bg='aquamarine')
     root.mainloop()

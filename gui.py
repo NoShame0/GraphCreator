@@ -140,6 +140,8 @@ class MainWindow(Tk):
             max_len = max([len(name) for name in names_graphs])
 
             btns = [ButtonCreate(name, self, text=name, width=max_len, activebackground='Gray',
+                                 bg='#803e75',
+                                 fg='white',
                                  activeforeground='white',
                                  highlightcolor='purple',
                                  relief='ridge') for name in names_graphs]
@@ -372,7 +374,7 @@ class GraphPictureTab(ttk.Frame):
         self.label_photo = Label(self, image=img)  # Создается Label для вставки изображения
         self.label_photo.image = img
 
-        self.label_photo.pack()
+        self.label_photo.pack(expand=True, fill='both')
 
 
 class Settings(Toplevel):
@@ -388,7 +390,7 @@ class Settings(Toplevel):
             self.link_save = '(Папка не выбрана)'
 
         self.resizable(False, False)
-        self.label_dir = Label(self, text=f'Текущая папка дляв сохранения файлов: {self.link_save}', padx=30, pady=30)
+        self.label_dir = Label(self, text=f'Текущая папка для сохранения файлов: {self.link_save}', padx=30, pady=30)
         self.label_dir.grid()
         Button(self, text='Изменить...', command=self.changedir).grid(padx=30, pady=30)
 
